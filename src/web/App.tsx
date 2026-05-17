@@ -37,14 +37,14 @@ export default function App() {
         </div>
       </section>
 
-      <section id="try" className="max-w-3xl mx-auto px-6 pb-12">
+      <section id="try" className="max-w-5xl mx-auto px-6 pb-16">
         <p className="text-xs text-slate-500 text-center mb-4">
           Requires a Chromium-based browser (Chrome, Edge, Arc). Brave: turn off shields for localhost.
         </p>
-        <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200 overflow-hidden">
-          <div className="px-6 py-5 border-b border-slate-100">
-            <h2 className="text-lg font-semibold text-slate-900">Try it now</h2>
-            <p className="text-sm text-slate-500 mt-0.5 mb-4">
+        <div className="bg-white rounded-3xl shadow-2xl shadow-slate-300/50 border-2 border-slate-300 overflow-hidden">
+          <div className="px-10 py-8 border-b-2 border-slate-200 bg-slate-50">
+            <h2 className="text-2xl font-bold text-slate-900">Try it now</h2>
+            <p className="text-base text-slate-600 mt-1 mb-5">
               Step 1 — connect an Obsidian vault. Step 2 — record a short meeting.
             </p>
             <VaultPicker
@@ -54,7 +54,7 @@ export default function App() {
               isConnected={!!vaultHandle}
             />
           </div>
-          <div className="p-6">
+          <div className="p-10">
             <Recorder vaultHandle={vaultHandle} />
           </div>
         </div>
