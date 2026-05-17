@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import Summary from './Summary';
+import SaveTranscript from './SaveTranscript';
 
 interface MeetingSummary {
   summary: string;
@@ -161,17 +162,20 @@ export default function Recorder({ vaultHandle }: RecorderProps) {
 
           {transcript && (
             <div className="mt-6">
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-3 gap-3 flex-wrap">
                 <h2 className="text-xl font-semibold text-gray-800">Transcript:</h2>
-                {!summary && (
-                  <button
-                    onClick={handleSummarize}
-                    disabled={isSummarizing}
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-                  >
-                    {isSummarizing ? '⏳ Summarizing...' : '✨ Summarize'}
-                  </button>
-                )}
+                <div className="flex gap-2 flex-wrap">
+                  <SaveTranscript transcript={transcript} vaultHandle={vaultHandle} />
+                  {!summary && (
+                    <button
+                      onClick={handleSummarize}
+                      disabled={isSummarizing}
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {isSummarizing ? 'Summarizing…' : 'Summarize'}
+                    </button>
+                  )}
+                </div>
               </div>
               <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
                 <p className="text-gray-700 whitespace-pre-wrap">{transcript}</p>

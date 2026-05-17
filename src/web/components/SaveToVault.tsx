@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 interface MeetingSummary {
   summary: string;
   action_items: string[];
@@ -13,30 +15,39 @@ interface SaveToVaultProps {
 
 export default function SaveToVault({ summary, vaultHandle, onSaved }: SaveToVaultProps) {
   const [isSaving, setIsSaving] = useState(false);
+  const [savedPath, setSavedPath] = useState<string | null>(null);
 
   const saveToVault = async () => {
     if (!vaultHandle) return;
 
     setIsSaving(true);
+    setSavedPath(null);
+
     try {
-      // Get or create /Meetings directory
+      // Re-check / request readwrite permission (some browsers downgrade after first use)
+      const perm = await (vaultHandle as any).queryPermission?.({ mode: 'readwrite' });
+      if (perm !== 'granted') {
+        const req = await (vaultHandle as any).requestPermission?.({ mode: 'readwrite' });
+        if (req !== 'granted') {
+          throw new Error('Write permission denied for this vault');
+        }
+      }
+
       const meetingsDir = await vaultHandle.getDirectoryHandle('Meetings', { create: true });
 
-      // Generate filename: meeting-YYYY-MM-DD-HHMM.md
       const now = new Date();
-      const filename = `meeting-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}.md`;
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const filename = `meeting-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}.md`;
 
-      // Create file handle
       const fileHandle = await meetingsDir.getFileHandle(filename, { create: true });
       const writable = await fileHandle.createWritable();
 
-      // Generate markdown content with YAML frontmatter
       const content = `---
 date: ${now.toISOString()}
 type: meeting-summary
 ---
 
-# Meeting Summary - ${now.toLocaleDateString()} ${now.toLocaleTimeString()}
+# Meeting Summary — ${now.toLocaleDateString()} ${now.toLocaleTimeString()}
 
 ## Summary
 
@@ -58,7 +69,7 @@ ${summary.follow_ups.length > 0 ? summary.follow_ups.map((item, i) => `${i + 1}.
       await writable.write(content);
       await writable.close();
 
-      alert(`✅ Saved to vault: Meetings/${filename}`);
+      setSavedPath(`Meetings/${filename}`);
       onSaved?.();
     } catch (err) {
       console.error('Failed to save to vault:', err);
@@ -71,29 +82,23 @@ ${summary.follow_ups.length > 0 ? summary.follow_ups.map((item, i) => `${i + 1}.
   const isDisabled = !vaultHandle || isSaving;
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 space-y-2">
       <button
         onClick={saveToVault}
         disabled={isDisabled}
         title={!vaultHandle ? 'Connect vault first' : ''}
         className="px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
       >
-        {isSaving ? '💾 Saving...' : '💾 Save to Vault'}
+        {isSaving ? 'Saving…' : 'Save to Vault'}
       </button>
-      
-      {!vaultHandle && (
-        <p className="text-xs text-gray-500 mt-2">
-          Connect an Obsidian vault first to save summaries
-        </p>
+
+      {savedPath && (
+        <p className="text-sm text-green-700">Saved to <code className="bg-green-50 px-1 rounded">{savedPath}</code></p>
       )}
-      
-      <p className="text-xs text-gray-500 mt-1">
-        Requires Chromium browser (Chrome, Edge, Brave)
-      </p>
+
+      {!vaultHandle && (
+        <p className="text-xs text-gray-500">Connect an Obsidian vault first to save summaries.</p>
+      )}
     </div>
   );
 }
-
-import { useState } from 'react';
-
-// Made with Bob

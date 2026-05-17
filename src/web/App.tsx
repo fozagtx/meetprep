@@ -8,21 +8,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
       <header className="border-b border-slate-200 bg-white/70 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-baseline gap-3">
-            <span className="text-xl font-bold text-slate-900">meetprep</span>
-            <span className="text-xs text-slate-500 hidden sm:inline">
-              Record. Transcribe. Summarize. Save.
-            </span>
-          </div>
-          <a
-            href="https://github.com/fozagtx/meetprep"
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm text-slate-600 hover:text-slate-900 transition-colors"
-          >
-            GitHub →
-          </a>
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-3">
+          <span className="text-xl font-bold text-slate-900">meetprep</span>
         </div>
       </header>
 
@@ -71,14 +58,15 @@ export default function App() {
       </section>
 
       <section id="try" className="max-w-3xl mx-auto px-6 pb-12">
+        <p className="text-xs text-slate-500 text-center mb-4">
+          Requires a Chromium-based browser (Chrome, Edge, Arc). Brave: turn off shields for localhost.
+        </p>
         <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200 overflow-hidden">
-          <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900">Try it now</h2>
-              <p className="text-sm text-slate-500 mt-0.5">
-                Connect a vault (optional), then record a short meeting.
-              </p>
-            </div>
+          <div className="px-6 py-5 border-b border-slate-100">
+            <h2 className="text-lg font-semibold text-slate-900">Try it now</h2>
+            <p className="text-sm text-slate-500 mt-0.5 mb-4">
+              Step 1 — connect an Obsidian vault. Step 2 — record a short meeting.
+            </p>
             <VaultPicker
               onPickVault={pickVault}
               isLoading={isLoading}
@@ -90,9 +78,6 @@ export default function App() {
             <Recorder vaultHandle={vaultHandle} />
           </div>
         </div>
-        <p className="text-xs text-slate-500 text-center mt-4">
-          Requires a Chromium-based browser (Chrome, Edge, Arc). Brave: turn off shields for localhost.
-        </p>
       </section>
 
       <footer className="border-t border-slate-200 mt-8">
