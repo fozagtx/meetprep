@@ -37,26 +37,6 @@ export default function App() {
         </div>
       </section>
 
-      <section className="max-w-5xl mx-auto px-6 pb-12">
-        <div className="grid sm:grid-cols-3 gap-4">
-          <FeatureCard
-            step="01"
-            title="Record"
-            body="One click captures your mic via the browser. No installs, no plugins."
-          />
-          <FeatureCard
-            step="02"
-            title="Transcribe & summarize"
-            body="IBM Watson transcribes. Granite extracts a summary, decisions, action items, and follow-ups."
-          />
-          <FeatureCard
-            step="03"
-            title="Save to Obsidian"
-            body="Write the structured note straight into your vault. Files never leave your machine."
-          />
-        </div>
-      </section>
-
       <section id="try" className="max-w-3xl mx-auto px-6 pb-12">
         <p className="text-xs text-slate-500 text-center mb-4">
           Requires a Chromium-based browser (Chrome, Edge, Arc). Brave: turn off shields for localhost.
@@ -77,6 +57,26 @@ export default function App() {
           <div className="p-6">
             <Recorder vaultHandle={vaultHandle} />
           </div>
+        </div>
+      </section>
+
+      <section className="max-w-5xl mx-auto px-6 pb-12">
+        <div className="grid sm:grid-cols-3 gap-4">
+          <FeatureCard
+            step="01"
+            title="Record"
+            body="One click captures your mic via the browser. No installs, no plugins."
+          />
+          <FeatureCard
+            step="02"
+            title="Transcribe & summarize"
+            body="IBM Watson transcribes. Granite extracts a summary, decisions, action items, and follow-ups."
+          />
+          <FeatureCard
+            step="03"
+            title="Save to Obsidian"
+            body="Write the structured note straight into your vault. Files never leave your machine."
+          />
         </div>
       </section>
 
