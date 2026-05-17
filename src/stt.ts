@@ -4,18 +4,24 @@ export async function transcribeAudio(audioBlob: Blob): Promise<string> {
   // Get basic auth token
   const auth = btoa(`apikey:${config.STT_APIKEY}`);
 
-  const response = await fetch(`${config.STT_URL}/v1/recognize`, {
+  const contentType = audioBlob.type || 'audio/webm;codecs=opus';
+  const url = `${config.STT_URL.replace(/\/$/, '')}/v1/recognize?model=en-US_BroadbandModel`;
+
+  console.log(`[STT] POST ${url} (${audioBlob.size} bytes, ${contentType})`);
+
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Authorization': `Basic ${auth}`,
-      'Content-Type': 'audio/webm',
+      'Content-Type': contentType,
     },
     body: audioBlob,
   });
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`STT API request failed: ${response.statusText} - ${error}`);
+    console.error(`[STT] ${response.status} ${response.statusText}: ${error}`);
+    throw new Error(`STT API request failed: ${response.status} ${response.statusText} - ${error}`);
   }
 
   const data = await response.json();
