@@ -1,3 +1,5 @@
+import SaveToVault from './SaveToVault';
+
 interface MeetingSummary {
   summary: string;
   action_items: string[];
@@ -7,9 +9,10 @@ interface MeetingSummary {
 
 interface SummaryProps {
   summary: MeetingSummary;
+  vaultHandle: FileSystemDirectoryHandle | null;
 }
 
-export default function Summary({ summary }: SummaryProps) {
+export default function Summary({ summary, vaultHandle }: SummaryProps) {
   const copyToClipboard = () => {
     const text = `
 MEETING SUMMARY
@@ -97,6 +100,9 @@ ${summary.follow_ups.map((item, i) => `${i + 1}. ${item}`).join('\n')}
           <p className="text-gray-500 italic">No follow-ups needed</p>
         )}
       </div>
+
+      {/* Save to Vault */}
+      <SaveToVault summary={summary} vaultHandle={vaultHandle} />
     </div>
   );
 }

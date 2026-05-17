@@ -8,7 +8,11 @@ interface MeetingSummary {
   follow_ups: string[];
 }
 
-export default function Recorder() {
+interface RecorderProps {
+  vaultHandle: FileSystemDirectoryHandle | null;
+}
+
+export default function Recorder({ vaultHandle }: RecorderProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -113,10 +117,8 @@ export default function Recorder() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-2xl mx-auto px-6">
       <div className="bg-white rounded-lg shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Meeting Transcription</h1>
-
         <div className="space-y-4">
           <div className="flex gap-4">
             {!isRecording ? (
@@ -176,7 +178,7 @@ export default function Recorder() {
             </div>
           )}
 
-          {summary && <Summary summary={summary} />}
+          {summary && <Summary summary={summary} vaultHandle={vaultHandle} />}
         </div>
       </div>
     </div>
